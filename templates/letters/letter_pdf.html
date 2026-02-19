@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Helvetica, sans-serif; font-size: 12pt; line-height: 1.5; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 18pt; text-transform: uppercase; }
+        .date { text-align: right; margin-bottom: 20px; }
+        .recipient { margin-bottom: 20px; }
+        .subject { font-weight: bold; text-decoration: underline; margin-bottom: 20px; }
+        .content { margin-bottom: 30px; text-align: justify; }
+        .footer { margin-top: 50px; }
+        .signature { margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Smart HR Solutions</h1>
+        <p>123 Business Park, Tech City, India - 400001</p>
+    </div>
+
+    <div class="date">
+        Date: {{ letter.joining_date|date:"F d, Y" }}
+    </div>
+
+    <div class="recipient">
+        To,<br>
+        <strong>{{ letter.candidate_name }}</strong><br>
+        {{ letter.email }}
+    </div>
+
+    <div class="subject">
+        Subject: Appointment Letter for the post of {{ letter.designation }}
+    </div>
+
+    <div class="content">
+        <p>Dear {{ letter.candidate_name }},</p>
+
+        <p>We are pleased to offer you the position of <strong>{{ letter.designation }}</strong> at Smart HR Solutions.</p>
+
+        <p>Your monthly salary will be <strong>INR {{ letter.salary }}</strong> ({{ letter.salary_in_words }}).</p>
+
+        <p>You are requested to join us on <strong>{{ letter.joining_date|date:"F d, Y" }}</strong>.</p>
+
+        <p>The terms and conditions of your employment are enclosed with this letter. We look forward to welcoming you to our team.</p>
+    </div>
+
+    <div class="footer">
+        <p>Yours Customarily,</p>
+        <div class="signature">
+            <p>__________________________</p>
+            <p><strong>Authorized Signatory</strong></p>
+            <p>Smart HR Solutions</p>
+        </div>
+    </div>
+</body>
+</html>
