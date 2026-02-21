@@ -25,13 +25,12 @@ def sub_admin_dashboard(request):
 
 
 from docxtpl import DocxTemplate
-from docx2pdf import convert
 from docx import Document
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from docx.enum.text import WD_TAB_ALIGNMENT
 from docx.shared import Inches
-import pythoncom
+import subprocess
 import tempfile
 import copy
 
@@ -280,10 +279,13 @@ def generate_letter(request):
             # 1. Generate DOCX file
             docx_path = generate_docx_file(letter)
             
-            # 2. Convert to PDF
-            pythoncom.CoInitialize() # Required for docx2pdf on server threads
+            # 2. Convert to PDF using LibreOffice
             pdf_path = docx_path.replace(".docx", ".pdf")
-            convert(docx_path, pdf_path)
+            out_dir = os.path.dirname(pdf_path)
+            subprocess.run([
+                "libreoffice", "--headless", "--convert-to", "pdf", 
+                docx_path, "--outdir", out_dir
+            ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             # 3. Handle Action
             if action == 'preview':
@@ -385,10 +387,13 @@ def download_doc(request, pk):
         # Generate DOCX
         docx_path = generate_docx_file(letter)
         
-        # Convert to PDF
-        pythoncom.CoInitialize()
+        # Convert to PDF using LibreOffice
         pdf_path = docx_path.replace(".docx", ".pdf")
-        convert(docx_path, pdf_path)
+        out_dir = os.path.dirname(pdf_path)
+        subprocess.run([
+            "libreoffice", "--headless", "--convert-to", "pdf", 
+            docx_path, "--outdir", out_dir
+        ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
         # Read the PDF
         with open(pdf_path, 'rb') as pdf_file:
